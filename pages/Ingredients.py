@@ -1,5 +1,6 @@
 import streamlit as st
 import time
+from testing import fetch_recipes
 
 st.set_page_config(layout="wide")
 
@@ -27,6 +28,7 @@ st.markdown("---")
 # keeps the info for ingredients inputted by user
 if "ingredients" not in st.session_state:
     st.session_state.ingredients = []
+
 
 col1, col2 = st.columns([2,2])
 
@@ -153,7 +155,8 @@ with col2:
         with middle:
             if st.button("See Recipes"):
                 st.success("Ingredients saved! Redirecting to recipes... ")
-                time.sleep(2)  
+                time.sleep(2) 
+                fetch_recipes(st.session_state.ingredients) 
                 st.switch_page("pages/Recipes.py")   
 
 st.markdown("---")

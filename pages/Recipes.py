@@ -1,4 +1,5 @@
 import streamlit as st
+from testing import fetch_recipes
 
 st.set_page_config(layout="wide")
 
@@ -27,14 +28,16 @@ st.markdown("---")
 CARD_COLOR = "#D5E4CF"
 TEXT_COLOR = "#60524bff"
 
-# recipe data (this obv needs to be changed im just leaving it for now so you have an idea)
-recipes = [
-    {"title": "Grilled Chicken Bowl", "desc": "A light and flavorful bowl featuring seasoned chicken and vegetables."},
-    {"title": "Creamy Mushroom Pasta", "desc": "A hearty pasta tossed with mushrooms, garlic, and cream sauce."},
-    {"title": "Chickpea Salad", "desc": "A refreshing salad with chickpeas, cucumber, and lemon dressing."},
-    {"title": "Beef Stir Fry", "desc": "Quick and easy beef stir fry with fresh veggies and soy glaze."},
-    {"title": "Garlic Butter Shrimp", "desc": "Succulent shrimp tossed in a garlic butter sauce with herbs."},
-]
+# recipe data - converts list into a string 
+def get_ingredient():
+    items = st.session_state.get("ingredients", [])
+    ingredient_names = [item["ingredient"] for item in items if "ingredient" in item]
+    return ", ".join(ingredient_names)
+
+#Calling API
+ingredient_string = get_ingredient()
+recipes = fetch_recipes(ingredient_string)
+
 
 # style guide for the cards along with hover effects! fancy!
 st.markdown(f"""
@@ -64,7 +67,7 @@ for i in range(0, len(recipes), 3):
                 f"""
                 <div class="recipe-card">
                     <h3 style="color:{TEXT_COLOR};">{recipe["title"]}</h3>
-                    <p style="color:{TEXT_COLOR}; font-size:16px;">{recipe["desc"]}</p>
+                    <p style="color:{TEXT_COLOR}; font-size:16px;"> Ingredients matched with your list.</p>
                 </div>
                 """,
                 unsafe_allow_html=True,
